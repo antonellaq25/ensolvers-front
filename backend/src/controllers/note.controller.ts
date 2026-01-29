@@ -4,7 +4,15 @@ import * as noteService from "../services/note.service.ts";
 export const create = async (req: Request, res: Response) => {
 	try {
 		const { title, content, categories = [] } = req.body;
-		const note = await noteService.createNote(title, content, categories);
+		const normalizedCategories = Array.from(
+			new Set(
+				(categories as string[])
+					.map((cat) => cat.trim().toLowerCase())
+					.filter((cat) => cat.length > 0)
+			)
+		);
+
+		const note = await noteService.createNote(title, content, normalizedCategories);
 		res.status(201).json(note);
 	} catch (error) {
 		res.status(500).json({ error: "Failed to create note" });
