@@ -17,7 +17,8 @@ export interface UpdateNotePayload {
 	title?: string
 	content?: string
 	isArchived?: boolean
-	categories?: string[]
+	addCategories?: string[]
+	removeCategories?: string[]
 }
 
 export interface FilterNotesParams {

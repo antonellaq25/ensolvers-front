@@ -29,8 +29,17 @@ export function useNotes() {
         create: (title: string, content: string, categories?: string[]) =>
             dispatch(createNote({ title, content, categories })),
 
-        update: (id: number, title: string, content: string, categories?: string[]) =>
-            dispatch(updateNote({ id, title, content, categories })),
+        update: (id: number, title: string, content: string, newCategories?: string[], originalCategories?: string[]) => {
+            const addCategories = newCategories?.filter(cat => !originalCategories?.includes(cat));
+            const removeCategories = originalCategories?.filter(cat => !newCategories?.includes(cat));
+            dispatch(updateNote({
+                id,
+                title,
+                content,
+                addCategories: addCategories?.length ? addCategories : undefined,
+                removeCategories: removeCategories?.length ? removeCategories : undefined,
+            }));
+        },
 
         remove: (id: number) =>
             dispatch(deleteNote(id)),

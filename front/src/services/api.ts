@@ -32,7 +32,7 @@ export const notesApi = {
 	createNote: (data: { title: string; content: string; categories?: string[] }) =>
 		api.post('/notes', data),
 
-	updateNote: (id: number, data: { title?: string; content?: string; isArchived?: boolean; categories?: string[] }) =>
+	updateNote: (id: number, data: { title?: string; content?: string; isArchived?: boolean; addCategories?: string[]; removeCategories?: string[] }) =>
 		api.put(`/notes/${id}`, data),
 
 	deleteNote: (id: number) => api.delete(`/notes/${id}`),

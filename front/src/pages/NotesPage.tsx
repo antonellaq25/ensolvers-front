@@ -24,6 +24,7 @@ export default function NotesPage() {
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const [originalCategories, setOriginalCategories] = useState<string[]>([]);
 	const [filterCategories, setFilterCategories] = useState<string[]>([]);
 
 	const availableCategories = getAllCategories();
@@ -32,15 +33,17 @@ export default function NotesPage() {
 		if (selectedNote) {
 			setTitle(selectedNote.title);
 			setContent(selectedNote.content);
-			
+
 			const cats = (selectedNote.categories || []).map((cat: any) =>
 				typeof cat === 'string' ? cat : cat.category?.name || cat.name || String(cat)
 			);
 			setSelectedCategories(cats);
+			setOriginalCategories(cats);
 		} else {
 			setTitle("");
 			setContent("");
 			setSelectedCategories([]);
+			setOriginalCategories([]);
 		}
 	}, [selectedNote]);
 
@@ -63,7 +66,7 @@ export default function NotesPage() {
 	const handleSave = () => {
 		if (!title.trim()) return;
 		selectedNote
-			? update(selectedNote.id, title, content, selectedCategories)
+			? update(selectedNote.id, title, content, selectedCategories, originalCategories)
 			: create(title, content, selectedCategories);
 	};
 
