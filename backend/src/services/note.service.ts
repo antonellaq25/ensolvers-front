@@ -102,11 +102,54 @@ export const updateNote = async (
     title?: string;
     content?: string;
     isArchived?: boolean;
+    addCategories?: string[];
+    removeCategories?: string[];
   }
 ) => {
+  const { addCategories, removeCategories, ...rest } = data;
+
+  if (removeCategories && removeCategories.length > 0) {
+    const categoriesToRemove = await prisma.category.findMany({
+      where: { name: { in: removeCategories } },
+      select: { id: true },
+    });
+
+    await prisma.noteCategory.deleteMany({
+      where: {
+        noteId: id,
+        categoryId: { in: categoriesToRemove.map((c) => c.id) },
+      },
+    });
+  }
+
+  const categoryOperations: any = {};
+
+  if (addCategories && addCategories.length > 0) {
+    categoryOperations.create = addCategories.map((name) => ({
+      category: {
+        connectOrCreate: {
+          where: { name },
+          create: { name },
+        },
+      },
+    }));
+  }
+
   return prisma.note.update({
     where: { id },
-    data,
+    data: {
+      ...rest,
+      ...(Object.keys(categoryOperations).length > 0 && {
+        categories: categoryOperations,
+      }),
+    },
+    include: {
+      categories: {
+        include: {
+          category: true,
+        },
+      },
+    },
   });
 };
 export const deleteNote = async (id: number) => {

@@ -53,19 +53,30 @@ export const filterNotes = async (req: Request, res: Response) => {
 		res.status(500).json({ error: "Failed to filter notes" });
 	}
 };
+const normalizeCategories = (categories: string[]): string[] =>
+  Array.from(
+    new Set(
+      categories
+        .map((cat) => cat.trim().toLowerCase())
+        .filter((cat) => cat.length > 0)
+    )
+  );
+
 export const updateNote = async (
   req: Request,
-  res: Response, 
-	next: Function
+  res: Response,
+  next: Function
 ) => {
   try {
     const id = Number(req.params.id);
-    const { title, content, isArchived } = req.body;
+    const { title, content, isArchived, addCategories, removeCategories } = req.body;
 
     const note = await noteService.updateNote(id, {
       title,
       content,
       isArchived,
+      addCategories: addCategories ? normalizeCategories(addCategories) : undefined,
+      removeCategories: removeCategories ? normalizeCategories(removeCategories) : undefined,
     });
 
     res.json(note);
