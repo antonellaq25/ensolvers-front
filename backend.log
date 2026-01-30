@@ -1,0 +1,5 @@
+
+> ensolvers-backend@1.0.0 dev
+> tsx watch --env-file=.env src/server.ts
+
+Server running on http://localhost:3000
