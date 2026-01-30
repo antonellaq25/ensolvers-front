@@ -26,11 +26,11 @@ export function useNotes() {
         selectNote: (note: Note | null) =>
             dispatch(setSelectedNote(note)),
 
-        create: (title: string, content: string) =>
-            dispatch(createNote({ title, content })),
+        create: (title: string, content: string, categories?: string[]) =>
+            dispatch(createNote({ title, content, categories })),
 
-        update: (id: number, title: string, content: string) =>
-            dispatch(updateNote({ id, title, content })),
+        update: (id: number, title: string, content: string, categories?: string[]) =>
+            dispatch(updateNote({ id, title, content, categories })),
 
         remove: (id: number) =>
             dispatch(deleteNote(id)),
@@ -43,5 +43,14 @@ export function useNotes() {
 
         toggleArchived: () =>
             dispatch(toggleShowArchived()),
+
+        getAllCategories: () => {
+            const allCategories = state.notes.flatMap(note => note.categories || []);
+            const stringCategories = allCategories
+                .map((cat: any) => typeof cat === 'string' ? cat : cat.category?.name || cat.name || null)
+                .filter((cat): cat is string => typeof cat === 'string' && cat.length > 0);
+            const uniqueCategories = Array.from(new Set(stringCategories));
+            return uniqueCategories.sort();
+        },
     };
 }

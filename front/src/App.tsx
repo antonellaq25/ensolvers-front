@@ -6,7 +6,7 @@ function App() {
     <>
       <div className="App">
         <h1 className="text-3xl font-bold text-indigo-600">
-          Notes App 🚀
+          Notes App 
         </h1>
         <NotesPage />
       </div>

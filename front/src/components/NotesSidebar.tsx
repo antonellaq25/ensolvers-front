@@ -1,4 +1,5 @@
 import NotesList from "./NotesList";
+import CategoryFilter from "./CategoryFilter";
 import type { Note } from "../types/note.types";
 
 interface Props {
@@ -8,6 +9,9 @@ interface Props {
 	onNew: () => void;
 	onToggleArchived: () => void;
 	onSelect: (note: Note) => void;
+	availableCategories: string[];
+	filterCategories: string[];
+	onFilterCategoriesChange: (categories: string[]) => void;
 }
 
 export default function NotesSidebar({
@@ -17,11 +21,14 @@ export default function NotesSidebar({
 	onNew,
 	onToggleArchived,
 	onSelect,
+	availableCategories,
+	filterCategories,
+	onFilterCategoriesChange,
 }: Props) {
 	return (
 		<aside className="w-72 bg-white border-r border-gray-200 flex flex-col">
 			<div className="p-4 space-y-3">
-				<h1 className="text-xl font-bold">📝 My Notes</h1>
+				<h1 className="text-xl font-bold">My Notes</h1>
 
 				<button
 					onClick={onNew}
@@ -39,6 +46,12 @@ export default function NotesSidebar({
 				>
 					{showArchived ? "Show Active Notes" : "Show Archived Notes"}
 				</button>
+
+				<CategoryFilter
+					availableCategories={availableCategories}
+					selectedCategories={filterCategories}
+					onCategoriesChange={onFilterCategoriesChange}
+				/>
 			</div>
 
 			<NotesList

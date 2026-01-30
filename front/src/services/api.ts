@@ -25,14 +25,14 @@ export const notesApi = {
 		page?: number
 		limit?: number
 		title?: string
-		categories?: number[]
+		categories?: string[]
 	}) => api.get('/notes/filter', { params }),
 
 
-	createNote: (data: { title: string; content: string; categories?: number[] }) =>
+	createNote: (data: { title: string; content: string; categories?: string[] }) =>
 		api.post('/notes', data),
 
-	updateNote: (id: number, data: { title?: string; content?: string; isArchived?: boolean }) =>
+	updateNote: (id: number, data: { title?: string; content?: string; isArchived?: boolean; categories?: string[] }) =>
 		api.put(`/notes/${id}`, data),
 
 	deleteNote: (id: number) => api.delete(`/notes/${id}`),
